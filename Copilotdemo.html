@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BALANCED HR - Copilot Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #E60000;
+            --primary-dark: #AA0000;
+            --accent: #C80000;
+            --bg-dark: #000000;
+            --card-bg: #333333;
+            --text-gray: #54595F;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: white;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            perspective: 1000px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, #E60000, #C80000);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Logika otáčania kariet */
+        .flip-card {
+            background-color: transparent;
+            height: 380px;
+            perspective: 1000px;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .flip-card-front {
+            background: linear-gradient(145deg, #333333, #1a1a1a);
+            border: 1px solid rgba(230, 0, 0, 0.1);
+        }
+
+        .flip-card-back {
+            background: linear-gradient(145deg, #1a1a1a, #E60000);
+            color: white;
+            transform: rotateY(180deg);
+            border: 1px solid var(--primary);
+            padding: 1.5rem;
+            justify-content: center;
+            text-align: left;
+        }
+
+        .card-glow:hover {
+            box-shadow: 0 0 25px rgba(230, 0, 0, 0.3);
+        }
+
+        .prompt-box {
+            background: rgba(0, 0, 0, 0.4);
+            border-left: 4px solid var(--primary);
+        }
+
+        /* Vlastný Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #54595F;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-12">
+
+    <!-- Hlavička -->
+    <header class="p-6 border-b border-gray-800 bg-black sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <h1 class="text-2xl font-bold tracking-tighter">BALANCED <span class="text-[#E60000]">HR</span></h1>
+                <p class="text-xs text-gray-400 uppercase tracking-widest">AI Empowerment Solutions</p>
+            </div>
+            
+            <div class="flex items-center gap-6">
+                <div class="text-right hidden md:block">
+                    <p class="text-sm font-semibold">Rasťo Kozlík</p>
+                    <p class="text-xs text-[#E60000]">AI Lektor</p>
+                </div>
+                <!-- Nahradená ikona vašou fotografiou -->
+                <img src="mojafotka.jpg.png" alt="Rasťo Kozlík" class="h-10 w-10 rounded-full border-2 border-[#E60000] object-cover shadow-lg">
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 mt-10">
+        
+        <!-- Úvodná sekcia -->
+        <section class="mb-12 text-center">
+            <h2 class="text-4xl md:text-5xl font-extrabold mb-4">Interaktívna príručka <span class="gradient-text">Copilot</span></h2>
+            <p class="text-[#54595F] max-w-2xl mx-auto">Optimalizujte svoju prácu s umelou inteligenciou. Otočte kartu pre detailné informácie o každej funkcii.</p>
+        </section>
+
+        <!-- Prepínač verzií -->
+        <div class="flex justify-center mb-10">
+            <div class="bg-[#1a1a1a] p-1 rounded-xl flex border border-gray-800">
+                <button onclick="setVersion('free')" id="btn-free" class="px-8 py-2 rounded-lg font-medium transition-all duration-300 bg-red-600 text-white shadow-lg">
+                    Copilot Free
+                </button>
+                <button onclick="setVersion('pro')" id="btn-pro" class="px-8 py-2 rounded-lg font-medium transition-all duration-300 text-gray-400">
+                    Copilot M365 (30$)
+                </button>
+            </div>
+        </div>
+
+        <!-- Mriežka modulov -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="modules-container">
+            <!-- Obsah vložený cez JS -->
+        </div>
+
+        <!-- Sekcia Prompt Builder -->
+        <section class="mt-16 bg-[#1a1a1a] border border-gray-800 p-8 rounded-2xl">
+            <div class="flex items-center gap-3 mb-6">
+                <i class="fas fa-wand-magic-sparkles text-[#E60000] text-2xl"></i>
+                <h3 class="text-2xl font-bold">Smart Prompt Builder</h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="space-y-4">
+                    <label class="block text-sm font-medium text-gray-400">Cieľ (Čo chceš urobiť?)</label>
+                    <input type="text" id="p-goal" placeholder="napr. Napíš e-mail" class="w-full bg-black border border-gray-700 rounded-lg p-3 focus:border-[#E60000] outline-none transition-all">
+                </div>
+                <div class="space-y-4">
+                    <label class="block text-sm font-medium text-gray-400">Kontext (Pre koho/O čom?)</label>
+                    <input type="text" id="p-context" placeholder="napr. klientovi o meškaní" class="w-full bg-black border border-gray-700 rounded-lg p-3 focus:border-[#E60000] outline-none transition-all">
+                </div>
+                <div class="space-y-4">
+                    <label class="block text-sm font-medium text-gray-400">Tón (Štýl komunikácie)</label>
+                    <select id="p-tone" class="w-full bg-black border border-gray-700 rounded-lg p-3 focus:border-[#E60000] outline-none transition-all">
+                        <option value="profesionálny">Profesionálny</option>
+                        <option value="priateľský">Priateľský</option>
+                        <option value="stručný">Stručný a jasný</option>
+                        <option value="kreatívny">Kreatívny</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mt-8 p-4 prompt-box rounded-lg flex flex-col md:flex-row justify-between items-center gap-4">
+                <div id="generated-prompt" class="text-gray-300 italic text-sm md:text-base">
+                    Vyplňte polia vyššie pre vygenerovanie perfektného promptu...
+                </div>
+                <button onclick="copyPrompt()" class="copy-btn whitespace-nowrap bg-[#E60000] hover:bg-[#AA0000] text-white px-6 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2">
+                    <i class="far fa-copy"></i> KOPÍROVAŤ
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Päta -->
+    <footer class="mt-20 border-t border-gray-800 p-10 text-center">
+        <p class="text-gray-500 text-sm">© 2024 BALANCED HR | Rasťo Kozlík - AI Lektor</p>
+        <p class="text-xs text-gray-600 mt-2 italic">Prejdite kurzorom na kartu pre detailné informácie.</p>
+    </footer>
+
+    <script>
+        const data = {
+            free: [
+                {
+                    title: "Copilot Pages",
+                    icon: "fa-file-lines",
+                    desc: "Vaše digitálne plátno. Odpovede AI môžete meniť na trvalý obsah.",
+                    features: ["Pin to Page", "Základná editácia", "Osobné poznámky"],
+                    detail: "Princíp spočíva v premene pominuteľného chatu na dynamický dokument. Kliknutím na tlačidlo 'Upraviť v Pages' sa text presunie do bočného panelu, kde ho môžete s AI spoločne prepisovať a formátovať bez toho, aby sa stratil v histórii chatu."
+                },
+                {
+                    title: "Pamäť a Personalizácia",
+                    icon: "fa-brain",
+                    desc: "Copilot si pamätá váš štýl. Nastavte si základné preferencie.",
+                    features: ["Tón hlasu", "Ukladanie faktov", "Správa histórie"],
+                    detail: "Funguje to ako dlhodobý kontextový súbor. AI analyzuje vaše minulé interakcie a uložené fakty (napr. názov vašej firmy), aby ste ich nemuseli v každom prompte opakovať. Môžete kedykoľvek zobraziť, čo si AI 'pamätá' a vymazať to."
+                },
+                {
+                    title: "Vlastné Inštrukcie",
+                    icon: "fa-sliders",
+                    desc: "Definujte, ako má Copilot reagovať v každom chate.",
+                    features: ["Rola v práci", "Formát výstupu", "Jazykové pravidlá"],
+                    detail: "Toto je systémová vrstva 'Custom Instructions'. Umožňuje definovať vašu personu (napr. 'Som HR manažér') a preferovaný výstup ('Vždy odpovedaj v odrážkach'). AI tieto pravidlá aplikuje automaticky na každý nový dopyt."
+                }
+            ],
+            pro: [
+                {
+                    title: "Copilot Agents",
+                    icon: "fa-robot",
+                    desc: "Špecializovaní agenti trénovaní na vaše dáta zo SharePointu.",
+                    features: ["Vlastní agenti", "Knowledge Isolation", "Tímová práca"],
+                    detail: "Agenti sú mikro-AI vytvorené nad špecifickým zdrojom dát. Namiesto hľadania v celom internete sa agent pozerá len do priečinka, ktorý mu určíte (napr. 'Smernice'). Tým sa eliminuje riziko nesprávnych informácií."
+                },
+                {
+                    title: "BizChat (Work Context)",
+                    icon: "fa-briefcase",
+                    desc: "Prepojenie s Outlookom, Teams a kalendárom.",
+                    features: ["Denný briefing", "Hľadanie v e-mailoch", "Zhrnutie schôdzí"],
+                    detail: "Využíva Microsoft Graph API na 'prečítanie' vášho pracovného dňa. Dokáže prepojiť informáciu z e-mailu od šéfa s tabuľkou v Exceli a pripraviť vám zhrnutie na dnešnú poradu v Teams."
+                },
+                {
+                    title: "Copilot Lab",
+                    icon: "fa-flask",
+                    desc: "Oficiálna knižnica a ukladanie vašich najlepších promptov.",
+                    features: ["Zdieľanie v tíme", "Tagovanie #Marketing", "Knižnica inšpirácií"],
+                    detail: "Centrálny hub pre firemné know-how. Namiesto ukladania promptov do Wordu ich ukladáte priamo v rozhraní Copilota, kde ich môžu vidieť a používať aj vaši kolegovia. Zvyšuje to štandard AI komunikácie vo firme."
+                },
+                {
+                    title: "Copilot Pages (Pro)",
+                    icon: "fa-users",
+                    desc: "Plná kolaborácia na stránkach v reálnom čase s tímom.",
+                    features: ["Multiplayer editácia", "Zdieľanie v M365", "Komponenty Loop"],
+                    detail: "Na rozdiel od Free verzie, Pro Pages umožňujú viacerým používateľom naraz upravovať AI výstupy. Je to prepojené s Microsoft Loop, takže kusy stránky môžete vložiť priamo do Teams chatu alebo Outlooku."
+                }
+            ]
+        };
+
+        let currentVersion = 'free';
+
+        function setVersion(ver) {
+            currentVersion = ver;
+            const btnFree = document.getElementById('btn-free');
+            const btnPro = document.getElementById('btn-pro');
+            
+            if(ver === 'free') {
+                btnFree.classList.add('bg-red-600', 'text-white', 'shadow-lg');
+                btnFree.classList.remove('text-gray-400');
+                btnPro.classList.remove('bg-red-600', 'text-white', 'shadow-lg');
+                btnPro.classList.add('text-gray-400');
+            } else {
+                btnPro.classList.add('bg-red-600', 'text-white', 'shadow-lg');
+                btnPro.classList.remove('text-gray-400');
+                btnFree.classList.remove('bg-red-600', 'text-white', 'shadow-lg');
+                btnFree.classList.add('text-gray-400');
+            }
+            renderModules();
+        }
+
+        function renderModules() {
+            const container = document.getElementById('modules-container');
+            container.innerHTML = '';
+            
+            data[currentVersion].forEach(mod => {
+                const card = document.createElement('div');
+                card.className = 'flip-card card-glow';
+                card.innerHTML = `
+                    <div class="flip-card-inner">
+                        <!-- PREDNÁ STRANA -->
+                        <div class="flip-card-front p-8">
+                            <div class="flex items-center gap-4 mb-6">
+                                <div class="h-14 w-14 rounded-xl bg-black flex items-center justify-center border border-gray-700 text-[#E60000] text-2xl">
+                                    <i class="fas ${mod.icon}"></i>
+                                </div>
+                                <h4 class="font-bold text-xl">${mod.title}</h4>
+                            </div>
+                            <p class="text-sm text-gray-400 mb-8 flex-grow leading-relaxed">${mod.desc}</p>
+                            <div class="space-y-3 mb-8">
+                                ${mod.features.map(f => `
+                                    <div class="flex items-center gap-3 text-xs text-gray-300">
+                                        <div class="h-5 w-5 rounded-full bg-[#E60000]/10 flex items-center justify-center">
+                                            <i class="fas fa-check text-[10px] text-[#E60000]"></i>
+                                        </div>
+                                        ${f}
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <div class="mt-auto text-[10px] uppercase tracking-widest text-[#E60000] font-bold flex items-center gap-2">
+                                <i class="fas fa-redo-alt"></i> Otoč pre detail
+                            </div>
+                        </div>
+                        <!-- ZADNÁ STRANA -->
+                        <div class="flip-card-back shadow-2xl">
+                            <h5 class="text-[#E60000] font-bold uppercase text-xs mb-3 tracking-widest flex items-center gap-2">
+                                <i class="fas fa-info-circle"></i> Princíp funkcie
+                            </h5>
+                            <h4 class="text-xl font-bold mb-4">${mod.title}</h4>
+                            <div class="h-px bg-white/20 w-full mb-4"></div>
+                            <p class="text-sm leading-relaxed text-gray-100">
+                                ${mod.detail}
+                            </p>
+                            <div class="mt-6 flex gap-2">
+                                <span class="px-2 py-1 rounded bg-black/30 text-[10px] border border-white/10 uppercase">Balanced HR Expert</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Logika Prompt Buildera
+        const inputs = ['p-goal', 'p-context', 'p-tone'];
+        inputs.forEach(id => {
+            document.getElementById(id).addEventListener('input', updatePrompt);
+        });
+
+        function updatePrompt() {
+            const goal = document.getElementById('p-goal').value || "[CIEĽ]";
+            const context = document.getElementById('p-context').value || "[KONTEXT]";
+            const tone = document.getElementById('p-tone').value;
+            
+            const prompt = `Pôsob ako expert. ${goal} pre ${context}. Použi ${tone} tón hlasu, buď konkrétny a výsledok naformátuj prehľadne.`;
+            document.getElementById('generated-prompt').innerText = prompt;
+            document.getElementById('generated-prompt').classList.remove('text-gray-300', 'italic');
+            document.getElementById('generated-prompt').classList.add('text-white');
+        }
+
+        function copyPrompt() {
+            const text = document.getElementById('generated-prompt').innerText;
+            const el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            
+            const btn = document.querySelector('.copy-btn');
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> SKOPÍROVANÉ';
+            btn.classList.replace('bg-[#E60000]', 'bg-green-600');
+            
+            setTimeout(() => {
+                btn.innerHTML = originalHtml;
+                btn.classList.replace('bg-green-600', 'bg-[#E60000]');
+            }, 2000);
+        }
+
+        // Inicializácia
+        window.onload = () => {
+            renderModules();
+        };
+    </script>
+</body>
+</html>
